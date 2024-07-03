@@ -13,13 +13,10 @@
     href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&display=swap"
     rel="stylesheet">
 
-  <title>itBblog</title>
+  <title>final-project</title>
 
-  <!-- Bootstrap core CSS -->
   <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
 
-  <!-- Inside your HTML template -->
-  <!-- set a force reset for contents -->
   <link rel="stylesheet" type="text/css" href="{% static 'css/fontawesome.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/templatemo-stand-blog.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/owl.css' %}">
@@ -29,18 +26,6 @@
 </head>
 
 <body>
-
-  <!-- ***** Preloader Start ***** -->
-  <!--
-  <div id="preloader">
-    <div class="jumper">
-      <div></div>
-      <div></div>
-      <div></div>
-    </div>
-  </div>
-  -->
-  <!-- ***** Preloader End ***** -->
 
   <!-- Header -->
   
@@ -54,18 +39,29 @@
           aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="navbarResponsive">
+          {% if user.is_authenticated %}
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'home' %}">Blog
-                <!-- <span class="sr-only">(current)</span> -->
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'books' %}">Books-Store</a>
+                <form method="post" action="{% url 'logout' %}">
+                  {% csrf_token %}
+                  <button type="submit">Logout</button>
+              </form>
             </li>
           </ul>
+          {% else %}
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'register' %}">Register</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'login' %}">Login</a>
+            </li>
+          </ul>
+          {% endif %}
         </div>
+
       </div>
     </nav>
   </header>
@@ -87,8 +83,15 @@
     </div>
   </section>
 
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
   {% block content %}
-  {% endblock content %}
+  {% endblock %}
 
   <!-- footer -->
     <!-- Site footer -->
@@ -99,7 +102,7 @@
             <h3>About</h3>
             <p class="text-justify">
               We serve tech content and help people transitions into tech by providing guidiance, blog post
-              books and metrials for all level of technology persional
+              and metrials for all level of technology persional
             </p>
           </div>
           <div class="f-col">
@@ -121,7 +124,7 @@
         <div class="row">
           <div class="col-md-8 col-sm-6 col-xs-12">
             <p class="copyright-text">Copyright &copy; 2017 All Rights Reserved by 
-         <a href="#">Scanfcode</a>.
+         <a href="#">ALX-PROJECT-TEAM</a>.
             </p>
           </div>
 
@@ -137,39 +140,8 @@
       </div>
 </footer>
 
-  <!-- Bootstrap core JavaScript -->
   <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
   <script src="{% static 'js/jquery.min.js' %}"></script>
-
-  <!-- 
-    Additional Scripts 
-  <script src="assets/js/custom.js"></script>
-  <script src="assets/js/owl.js"></script>
-  <script src="assets/js/slick.js"></script>
-  <script src="assets/js/isotope.js"></script>
-  <script src="assets/js/accordions.js"></script>
-  -->
-
-  <!--
-  <script src="{% static 'js/custom.js' %}"></script>
-  <script src="{% static 'js/owl.js' %}"></script>
-  <script src="{% static 'js/slick.js' %}"></script>
-  <script src="{% static 'js/isotope.js' %}"></script>
-  <script src="{% static 'js/accordions.js' %}"></script>
-  -->
-
-  <!--
-  <script language="text/Javascript">
-    cleared[0] = cleared[1] = cleared[2] = 0; //set a cleared flag for each field
-    function clearField(t) {                   //declaring the array outside of the
-      if (!cleared[t.id]) {                      // function makes it static and global
-        cleared[t.id] = 1;  // you could use true and false, but that's more typing
-        t.value = '';         // with more chance of typos
-        t.style.color = '#fff';
-      }
-    }
-  </script>
-  -->
 
 </body>
 
