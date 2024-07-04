@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.views.generic import (
@@ -12,21 +13,13 @@ from .models import BlogPost
 
 
 def home(request):
-    context = {"posts": BlogPost.objects.all()}
-    return render(request, "home.html", context)
-
-
-class PostListView(ListView):
-    model = BlogPost
-    template_name = "home.html"  # <app>/<model>_<viewtype>.html
-    context_object_name = "posts"
-    ordering = ["-date"]
-    paginate_by = 5
+    data = BlogPost.objects.all()
+    return render(request, "home.html", {"data": data})
 
 
 class UserPostListView(ListView):
     model = BlogPost
-    template_name = "user_posts.html"  # <app>/<model>_<viewtype>.html
+    template_name = "user_posts.html"
     context_object_name = "posts"
     paginate_by = 5
 
@@ -37,19 +30,25 @@ class UserPostListView(ListView):
 
 class PostDetailView(DetailView):
     model = BlogPost
+    template_name = "post_detail.html"
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = BlogPost
-    fields = ["title", "post"]
+    template_name = "post_form.html"
+    fields = ["title", "post", "image", "tag"]
 
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
+    def get_success_url(self):
+        return reverse("post-detail", kwargs={"pk": self.object.pk})
+
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = BlogPost
+    template_name = "post_form.html"
     fields = ["title", "post"]
 
     def form_valid(self, form):
@@ -62,9 +61,13 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             return True
         return False
 
+    def get_success_url(self):
+        return reverse("post-detail", kwargs={"pk": self.object.pk})
+
 
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = BlogPost
+    template_name = "post_confirm_delete.html"
     success_url = "/"
 
     def test_func(self):
@@ -72,7 +75,3 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         if self.request.user == post.author:
             return True
         return False
-
-
-def about(request):
-    return render(request, "about.html", {"title": "About"})
