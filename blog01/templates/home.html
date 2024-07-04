@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<section class="blog-posts">
+  <div class="container">
+
+    <div class="row">
+
+      <!-- blog post -->
+      <div class="col-lg-8">
+        <div class="all-blog-posts">
+
+          {% for item in data %}
+
+          <div class="col-lg-12">
+            <div class="blog-post">
+              <div class="blog-thumb">
+                <img src="{{ item.image }}" alt="..">
+              </div>
+              <div class="down-content">
+                <h10><span>Author - </span>{{ item.author }}</h10>
+                <h4>{{ item.title }}</h4>
+                <ul class="post-info">
+                  <li>Date Posted</li>
+                  <li>{{ item.date|date:"D - H | F, Y" }}</li>
+                </ul>
+                <a href="">
+                  
+                  <!-- click for more -->
+                  <p>{{ item.post }}</p>
+                </a>
+                <div class="post-options">
+                  <div class="row">
+                    <div class="col-6">
+                      <ul class="post-tags">
+                        <li><i class="fa fa-tags"></i></li>
+                        <!-- click for more tags on topic -->
+                        <li><a href="#">{{ item.tag }}</a></li>
+                      </ul>
+                    </div>
+                    <div class="col-6">
+                      <ul class="post-share">
+                        <li><i class="fa fa-share-alt"></i></li>
+                        <li><a href="#">Facebook</a> |</li>
+                        <li><a href="#">Twitter</a></li>
+                        <br>
+                        <!-- click for more comments -->
+                        <li><a href="#">36 Comments</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {% endfor %}
+
+          <div class="col-lg-12">
+            <div class="main-button">
+              <a href="{% url 'home' %}">View All Posts</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- aside -->
+      <div class="col-lg-4">
+        <div class="sidebar">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="sidebar-item search">
+                <form id="search_form" name="gs" method="GET" action="#">
+                  <input type="text" name="q" class="searchText" placeholder="type to search..." autocomplete="on">
+                </form>
+              </div>
+            </div>
+
+            <!--Recent Post-->
+            <div class="col-lg-12">
+              <div class="sidebar-item recent-posts">
+                <div class="sidebar-heading">
+                  <h2>Recent Posts</h2>
+                </div>
+                {% for item in data %}
+                <div class="content">
+                  <ul>
+                    <li><a href="#">
+                        <h5>{{ item.tag }}</h5>
+                        <span>{{ item.time }}</span>
+                      </a></li>
+                  </ul>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+
+            <!--Tag-->
+            <div class="col-lg-12">
+              <div class="sidebar-item tags">
+                <div class="sidebar-heading">
+                  <h2>Tag Clouds</h2>
+                </div>
+                {% for item in data %}
+                <div class="content">
+                  <ul>
+                    <li><a href="#">{{ item.tag }}</a></li>
+                  </ul>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+{% endblock content %}
