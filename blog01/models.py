@@ -1,6 +1,8 @@
+from typing import Iterable
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from PIL import Image
 
 
 class BlogPost(models.Model):
@@ -13,3 +15,11 @@ class BlogPost(models.Model):
 
     def __str__(self):
         return f"{self.title} - {self.tag}"
+
+    def save(self) -> None:
+        super().save()
+        img = Image.open(self.image.path)
+
+        if img.height > 580 or img.width > 533:
+            img.thumbnail((580, 533))
+            img.save(self.image.path)

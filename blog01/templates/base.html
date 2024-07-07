@@ -33,8 +33,10 @@
     <nav class="navbar navbar-expand-lg">
       <div class="container">
         <a class="navbar-brand" href="{% url 'home' %}">
-          <img id="logo-image" src="{% static 'media/devops-2.svg' %}" alt="">
+          <img id="logo-image" src="{% static 'media/Logo.svg' %}" alt="" width="48">
         </a>
+        </a>
+        <h3 style="color: #104175;">ALX PROJECT</h3>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
           aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -47,10 +49,7 @@
               <a class="nav-link" href="{% url 'post-create' %}">Create-BlogPost</a>
             </li>
             <li class="nav-item">
-                <form method="post" action="{% url 'logout' %}">
-                  {% csrf_token %}
-                  <button type="submit">Logout</button>
-              </form>
+              <a class="nav-link" href="{% url 'logout' %}">Logout</a>
             </li>
           </ul>
           {% else %}
@@ -88,9 +87,11 @@
 
   {% if messages %}
     {% for message in messages %}
+    <div class="container mt-4">
       <div class="alert alert-{{ message.tags }}">
         {{ message }}
       </div>
+    </div>
     {% endfor %}
   {% endif %}
   {% block content %}
@@ -104,8 +105,8 @@
           <div class="col-sm-12 col-md-8">
             <h3>About</h3>
             <p class="text-justify">
-              We serve tech content and help people transitions into tech by providing guidiance, blog post
-              and metrials for all level of technology persional
+              We serve tech content and help people transition into tech by providing guidance, blog posts, and materials for all levels of technology professionals.
+            </p>
             </p>
           </div>
           <div class="f-col">
@@ -116,7 +117,7 @@
                         <i class="fa-solid fa-envelope"></i>
                     </span>
                     <input type="text" class="form-control" placeholder="email" aria-label="email" aria-describedby="basic-addon1">
-                    <button class="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>
+                    <button class="btn btn-outline-secondary" type="button" id="button-addon2">submit</button>
                   </div>
             </form>
         </div>
@@ -126,7 +127,7 @@
       <div class="container">
         <div class="row">
           <div class="col-md-8 col-sm-6 col-xs-12">
-            <p class="copyright-text">Copyright &copy; 2017 All Rights Reserved by 
+            <p class="copyright-text">Copyright &copy; 2024 All Rights Reserved by 
          <a href="#">ALX-PROJECT-TEAM</a>.
             </p>
           </div>

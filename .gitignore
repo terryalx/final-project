@@ -2,3 +2,4 @@ env
 .git
 admin.md
 /website/.env
+__pycache__

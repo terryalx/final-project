@@ -10,10 +10,11 @@ from django.views.generic import (
     DeleteView,
 )
 from .models import BlogPost
+from django import forms
 
 
 def home(request):
-    data = BlogPost.objects.all()
+    data = BlogPost.objects.all().order_by("-date")
     return render(request, "home.html", {"data": data})
 
 
@@ -38,6 +39,12 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     template_name = "post_form.html"
     fields = ["title", "post", "image", "tag"]
 
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['post'].widget = forms.Textarea(attrs={'rows': 10, 'cols': 80})
+        form.fields['post'].initial = ''
+        return form
+
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
@@ -50,6 +57,11 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = BlogPost
     template_name = "post_form.html"
     fields = ["title", "post"]
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['post'].widget = forms.Textarea(attrs={'rows': 10, 'cols': 80})
+        return form
 
     def form_valid(self, form):
         form.instance.author = self.request.user
