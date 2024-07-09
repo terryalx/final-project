@@ -11,11 +11,18 @@ from django.views.generic import (
 )
 from .models import BlogPost
 from django import forms
+from django.core.paginator import Paginator
+from django.shortcuts import render
 
 
 def home(request):
-    data = BlogPost.objects.all().order_by("-date")
-    return render(request, "home.html", {"data": data})
+    data_list = BlogPost.objects.all().order_by("-date")
+    paginator = Paginator(data_list, 10)
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "home.html", {"page_obj": page_obj})
 
 
 class UserPostListView(ListView):
@@ -41,8 +48,8 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
-        form.fields['post'].widget = forms.Textarea(attrs={'rows': 10, 'cols': 80})
-        form.fields['post'].initial = ''
+        form.fields["post"].widget = forms.Textarea(attrs={"rows": 10, "cols": 80})
+        form.fields["post"].initial = ""
         return form
 
     def form_valid(self, form):
@@ -60,7 +67,7 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
-        form.fields['post'].widget = forms.Textarea(attrs={'rows': 10, 'cols': 80})
+        form.fields["post"].widget = forms.Textarea(attrs={"rows": 10, "cols": 80})
         return form
 
     def form_valid(self, form):
