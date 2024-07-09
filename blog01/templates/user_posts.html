@@ -1,9 +1,15 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block page_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/post_delete.css' %}">
+{% endblock %}
+
 {% block content %}
   <div class="container mt-4 mb-4">
     <h1 class="mb-3">Number of posts by {{ view.kwargs.username }} ({{ page_obj.paginator.count }})</h1>
     {% for post in posts %}
-        <article class="media content-section">
+        <article class="media content-section mb-4">
           <div class="media-body">
             <div class="article-metadata">
               <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
@@ -11,6 +17,29 @@
             </div>
             <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
             <p class="article-content">{{ post.post }}</p>
+            {% if post.author == user %}
+            <div>
+              <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-update' post.id %}">Update</a>
+              <button class="btn btn-danger btn-sm mt-1 mb-1" onclick="showDeletePopup('{{ post.id }}')">Delete</button>
+            </div>
+          
+            <!-- Hidden Popup Form -->
+            <div id="deletePopup" class="popup" style="display:none;">
+            <div class="content-section popup-content">
+              <form method="POST" id="deleteForm" action="{% url 'post-delete' post.id %}">
+                  {% csrf_token %}
+                  <fieldset class="form-group">
+                      <legend class="border-bottom mb-4">Delete Post</legend>
+                      <h2>Are you sure you want to delete the post "{{ post.title }}"</h2>
+                  </fieldset>
+                  <div class="form-group">
+                      <button class="btn btn-outline-danger" type="submit">Yes, Delete</button>
+                      <button type="button" class="btn btn-outline-secondary" onclick="hideDeletePopup()">Cancel</button>
+                  </div>
+              </form>
+            </div>
+            </div>
+            {% endif %}
           </div>
         </article>
     {% endfor %}
@@ -37,3 +66,8 @@
     {% endif %}
   </div>
 {% endblock content %}
+
+
+{% block page_js %}
+<script src="{% static 'js/post_delete.js' %}"></script>
+{% endblock page_js %}

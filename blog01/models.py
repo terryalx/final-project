@@ -8,9 +8,9 @@ from PIL import Image
 class BlogPost(models.Model):
     title = models.CharField(max_length=200)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    post = models.CharField(max_length=250, default="No description available")
-    image = models.ImageField(upload_to="blogPostImages/%Y/%m/%d")
-    tag = models.CharField(max_length=10)
+    post = models.TextField(max_length=10000, default="No description available")
+    image = models.ImageField(upload_to="blogPostImages/%Y/%m/%d", blank=True, null=True)
+    tag = models.CharField(max_length=25)
     date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
@@ -18,8 +18,9 @@ class BlogPost(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        img = Image.open(self.image.path)
+        if self.image:
+            img = Image.open(self.image.path)
 
-        if img.height > 580 or img.width > 533:
-            img.thumbnail((580, 533))
-            img.save(self.image.path)
+            if img.height > 580 or img.width > 533:
+                img.thumbnail((580, 533))
+                img.save(self.image.path)

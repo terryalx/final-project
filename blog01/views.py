@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
@@ -13,6 +13,9 @@ from .models import BlogPost
 from django import forms
 from django.core.paginator import Paginator
 from django.shortcuts import render
+
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
 
 
 def home(request):
@@ -50,6 +53,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         form = super().get_form(form_class)
         form.fields["post"].widget = forms.Textarea(attrs={"rows": 10, "cols": 80})
         form.fields["post"].initial = ""
+        form.fields["post"].label = "Post Content"
         return form
 
     def form_valid(self, form):
@@ -57,7 +61,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse("post-detail", kwargs={"pk": self.object.pk})
+        return reverse('user-posts', kwargs={"username": self.object.author})
 
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
@@ -84,13 +88,27 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return reverse("post-detail", kwargs={"pk": self.object.pk})
 
 
-class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-    model = BlogPost
-    template_name = "post_confirm_delete.html"
-    success_url = "/"
+# class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+#     model = BlogPost
+#     template_name = "user_posts.html"
+#     success_url = "/"
 
-    def test_func(self):
-        post = self.get_object()
-        if self.request.user == post.author:
-            return True
-        return False
+#     def test_func(self):
+#         post = self.get_object()
+#         if self.request.user == post.author:
+#             return True
+#         return False
+
+
+@login_required
+def post_delete(request, pk):
+    post = get_object_or_404(BlogPost, id=pk)
+    
+    if post.author != request.user:
+        return HttpResponseForbidden()
+
+    if request.method == 'POST':
+        post.delete()
+        return redirect('user-posts', username=post.author.username)
+
+    return redirect('user-posts', username=post.author.username)

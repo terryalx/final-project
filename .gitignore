@@ -3,3 +3,6 @@ env
 admin.md
 /website/.env
 __pycache__
+.env
+blogPostImages
+migrations
