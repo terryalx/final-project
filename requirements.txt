@@ -2,9 +2,8 @@ asgiref==3.7.2
 crispy-bootstrap4==2024.1
 Django==5.0
 django-crispy-forms==2.2
+mysqlclient==2.2.4
 Pillow==10.1.0
-python-dotenv==1.0.1
+python-decouple==3.8
 sqlparse==0.4.4
 typing_extensions==4.8.0
-crispy-bootstrap4==2024.1
-django-crispy-forms==2.2

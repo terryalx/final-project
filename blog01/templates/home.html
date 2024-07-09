@@ -11,7 +11,7 @@
       <div class="col-lg-8">
         <div class="all-blog-posts">
 
-          {% for item in data %}
+          {% for item in page_obj %}
 
           <div class="col-lg-12">
             <div class="blog-post">
@@ -59,13 +59,26 @@
 
           {% endfor %}
 
-          <div class="col-lg-12">
-            <div class="main-button">
-              <a href="{% url 'home' %}">View All Posts</a>
-            </div>
-          </div>
+          <div class="pagination, main-button col-lg-12" style="text-align: center;">
+            <span class="step-links" style="display: inline-block;">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1" style="margin-right: 5px;">&laquo; First</a>
+                    <a href="?page={{ page_obj.previous_page_number }}" style="margin-right: 5px;">Previous</a>
+                {% endif %}
+        
+                <span class="current" style="margin-right: 5px;">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+        
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" style="margin-right: 5px;">Next</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
 
         </div>
+
       </div>
 
       <!-- aside -->
@@ -86,7 +99,7 @@
                 <div class="sidebar-heading">
                   <h2>Recent Posts</h2>
                 </div>
-                {% for item in data %}
+                {% for item in page_obj %}
                 <div class="content">
                   <ul>
                     <li><a href="#">
@@ -105,7 +118,7 @@
                 <div class="sidebar-heading">
                   <h2>Tag Clouds</h2>
                 </div>
-                {% for item in data %}
+                {% for item in page_obj %}
                   {% if item.tag %}
                     <div class="content">
                       <ul>

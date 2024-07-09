@@ -65,6 +65,7 @@ Note: Please ensure that you have the latest version of Python installed before 
 5. Database Configuration:
     - Create a database and user with appropriate permissions.
     - Configure database connection details in `website/settings.py`.
+    - NOTE: for security all database info is saved in .env.
 
 
 6. Run Migrations: Apply database migrations to create the necessary tables:
