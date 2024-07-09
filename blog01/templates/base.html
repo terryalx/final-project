@@ -21,11 +21,12 @@
   <link rel="stylesheet" type="text/css" href="{% static 'css/templatemo-stand-blog.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/owl.css' %}">
 
-
+  {% block page_css %}
+  {% endblock %}
 
 </head>
 
-<body>
+<body style="min-height: 100vh; display: flex; flex-direction: column;">
 
   <!-- Header -->
   
@@ -36,7 +37,7 @@
           <img id="logo-image" src="{% static 'media/Logo.svg' %}" alt="" width="48">
         </a>
         </a>
-        <h3 style="color: #104175;">ALX PROJECT</h3>
+        <h3 style="color: #104175;">con|nect.tech</h3>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
           aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -99,7 +100,7 @@
 
   <!-- footer -->
     <!-- Site footer -->
-    <footer class="site-footer">
+    <footer class="site-footer" style="margin-top: auto;">
       <div class="container">
         <div class="row">
           <div class="col-sm-12 col-md-8">
@@ -146,6 +147,9 @@
 
   <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
   <script src="{% static 'js/jquery.min.js' %}"></script>
+
+  {% block page_js %}
+  {% endblock %}
 
 </body>
 
